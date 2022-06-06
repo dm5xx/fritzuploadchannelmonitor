@@ -1,6 +1,6 @@
 var opti = {
-    username: 'xxxx',
-    password: 'xxxx',
+    username: '#',
+    password: '#',
     server: 'fritz.box',
     boxip: '192.168.97.40' 
 };
