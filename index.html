@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <style>
+          body {
+              background-color: black;
+          }
+    </style>
+    <script src="chart.min.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+
+    <script type="text/javascript">
+
+        var resultTable = [];
+        var resultLabel = [];
+        var qfactorTable = [];
+
+        var resultTables = Array.from(Array(4), () => new Array(4));
+        var isTablesInit = false;
+
+        var analyseObj1 = {};
+        analyseObj1.IS64 = 0;
+        analyseObj1.IS32 = 0;
+        analyseObj1.IS16 = 0;
+        analyseObj1.IS8 = 0;
+        analyseObj1.IS4 = 0;
+
+        var analyseObj2 = {};
+        analyseObj2.IS64 = 0;
+        analyseObj2.IS32 = 0;
+        analyseObj2.IS16 = 0;
+        analyseObj2.IS8 = 0;
+        analyseObj2.IS4 = 0;
+
+        var analyseObj3 = {};
+        analyseObj3.IS64 = 0;
+        analyseObj3.IS32 = 0;
+        analyseObj3.IS16 = 0;
+        analyseObj3.IS8 = 0;
+        analyseObj3.IS4 = 0;
+
+        var analyseObj4 = {};
+        analyseObj4.IS64 = 0;
+        analyseObj4.IS32 = 0;
+        analyseObj4.IS16 = 0;
+        analyseObj4.IS8 = 0;
+        analyseObj4.IS4 = 0;
+
+        var ip = getUrlParam("ip", "192.168.97.133");
+        var days = getUrlParam("days", null);
+
+        var today = new Date();
+        var da = today.getFullYear()+'_'+get2Digits(today.getMonth()+1)+'_'+get2Digits(today.getDate());
+        var date = getUrlParam("date", null);
+
+        var numLab = [ "31", "37", "45", "51"];
+        var numCol = [ "red", "orange", "green", "cornflowerblue"];
+
+        function drawCharts(re_data)
+        {
+            if(!isTablesInit)
+            createDataTable(re_data);
+
+            const data1 = {
+                labels: resultLabel,
+                datasets: [{
+                label: 'Value',
+                data: qfactorTable,
+                fill: false,
+                borderColor: 'peachpuff',
+                pointRadius: 0.1,
+                pointHoverRadius: 0.1,
+                }]
+            }
+
+            const config1 = {
+                type: 'line',
+                data: data1,
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Quality over time - Messwerte: ' + resultTables[0].length + ' ('+ Math.round(resultTables[0].length/6) + ' min) '
+                            + " - Overall Quality-Level: " + getSumOfQFactorPercent() + '% '
+                            +' @ '+(date== null? da : date),
+                            color: '#ffffff'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                color: '#444444'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                color: '#444444'
+                            }
+                        }
+                    },
+                }
+            };
+
+            const myChart1 = new Chart(document.getElementById('qqq'), config1);
+
+            for(let a=0; a < 4; a++)
+            {
+                const data = {
+                    labels: resultLabel,
+                    datasets: [{
+                        label: 'Value',
+                        data: resultTables[a],
+                        fill: false,
+                        borderColor: numCol[a],
+                        pointRadius: 0.1,
+                        pointHoverRadius: 0.1,
+                    }]
+                };
+
+                let objW = window['analyseObj'+(a+1)];
+
+                const config = {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Timings: ' + objW.IS4 + " x 4QAM ("+Math.round(objW.IS4/6)+" min)  |  " 
+                                        + objW.IS8 + " x 8QAM ("+Math.round(objW.IS8/6)+" min)  |  "
+                                        + objW.IS16 + " x 16QAM ("+Math.round(objW.IS16/6)+" min)  |  "
+                                        + objW.IS32 + " x 32QAM ("+Math.round(objW.IS32/6)+" min)  |  "
+                                        + objW.IS64 + " x 64QAM ("+Math.round(objW.IS64/6)+" min)" + ' @@@ Channel '+ numLab[a] + 'mc',
+                                color: '#ffffff'
+                            },
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    drawBorder: false,
+                                    color: '#444444'
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    drawBorder: false,
+                                    color: '#444444'
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 70
+                            }
+                        },
+                    }
+                };
+                const myChart = new Chart(document.getElementById('myChart'+numLab[a]), config);
+            }
+        }
+
+        function fetchData() {
+    
+        //fetch("http://192.168.97.133:3000/Json?Days=1")
+        //fetch("http://192.168.97.133:3000/Json?Date=2022_06_04")
+        let fetchParams = '';
+
+        if(date != null)
+            fetchParams = "?Date="+date;
+        if(days != null)
+            fetchParams = "?Days="+days;
+        
+
+        fetch("http://"+ip+":3000/Json"+fetchParams)
+        .then(response => {
+        return response.json();
+        })
+        .then(re_data => 
+        {
+            drawCharts(re_data);
+        });
+
+        }
+
+
+
+      </script>
+    </head>
+    <body onload="fetchData()">
+
+    <div class="chart-container" style="position: relative; width:98vw">
+        <canvas id="qqq" style="width:100%;max-width:100%; height:18vh;"></canvas>
+        <canvas id="myChart31" style="width:100%;max-width:100%; height:20vh;"></canvas>
+        <canvas id="myChart37" style="width:100%;max-width:100%; height:20vh;"></canvas>
+        <canvas id="myChart45" style="width:100%;max-width:100%; height:20vh;"></canvas>
+        <canvas id="myChart51" style="width:100%;max-width:100%; height:20vh;"></canvas>
+    </div>
+    </body>
+  </html>
+  
