@@ -166,7 +166,13 @@ function Worker()
 
 
     path = './'+datePart+'.json';
-    resultJson.push(JSON.stringify(channelUs));
+
+    let cur_temp = JSON.stringify(channelUs);
+    
+    if(cur_temp.length > 425)
+      resultJson.push(cur_temp);
+    else
+      logger.log("Error in String lenght");
 
     if(writeCounter >90)
     {
