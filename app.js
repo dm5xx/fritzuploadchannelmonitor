@@ -73,7 +73,7 @@ async function getData(configItem)
   return JSON.stringify(finalWriteResult,null, '\t');
 }
 
-app.get('/Json', async (req, res) => {
+app.get('/XXJson', async (req, res) => {
   
   let configItem = {};
   configItem.GetCurrent = req.query.Days;
@@ -88,7 +88,7 @@ app.get('/Json', async (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
+app.get('/XX', (req, res) => {
   logger.log(__dirname);
   res.sendFile(__dirname+'/index.html');
 });
@@ -105,6 +105,9 @@ app.listen(3000, () =>
   logger.log(`Selrver listening on port 3000!`),
 );
 
+app.use(function(req, res){
+  //res.sendStatus(404);
+});
 
 const url = 'http://'+options.boxip+'/data.lua';
     
