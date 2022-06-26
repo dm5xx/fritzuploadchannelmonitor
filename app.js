@@ -93,6 +93,47 @@ app.get('/XX', (req, res) => {
   res.sendFile(__dirname+'/index.html');
 });
 
+let mu = [];
+
+app.get('/Raw', (req, res) => {
+  res.json(mu);
+});
+
+app.get('/CreateRaw', (req, res) => {
+
+  mu = [];
+  
+  try {
+    let ttt = fs.readdirSync('./', {withFileTypes: true})
+              .filter(item => !item.isDirectory())
+              .filter(item => item.name.startsWith("20"))
+              .map(item => item.name);
+
+    ttt.forEach(element => {
+      const data = fs.readFileSync('./'+element, 'utf8');
+      const jso = JSON.parse(data);
+      let lenjso = jso.length;
+      let arr = new Array(lenjso);
+
+      for(let a=0; a < lenjso; a++)
+      {
+        const jso_1 = JSON.parse(jso[a]);
+        let loc = {};
+        loc.Data = jso_1.Data;
+        loc.Time = jso_1.Time;
+        arr[a] = loc;
+      }
+        console.log(arr);
+        mu.push(arr);
+    });
+    // const frameworksData = JSON.stringify(arr)
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+});
+
 app.get('/config.js', (req, res) => {
   res.sendFile(__dirname+'/config.js');
 });
@@ -101,8 +142,8 @@ app.get('/chart.min.js', (req, res) => {
   res.sendFile(__dirname+'/chart.min.js');
 });
 
-app.listen(3000, () =>
-  logger.log(`Selrver listening on port 3000!`),
+app.listen(2999, () =>
+  logger.log(`Selrver listening on port 2999!`),
 );
 
 app.use(function(req, res){

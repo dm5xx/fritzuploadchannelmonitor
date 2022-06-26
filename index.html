@@ -168,8 +168,8 @@
 
         function fetchData() {
     
-        //fetch("http://192.168.97.133:3000/Json?Days=1")
-        //fetch("http://192.168.97.133:3000/Json?Date=2022_06_04")
+        //fetch("http://192.168.97.133:2999/Json?Days=1")
+        //fetch("http://192.168.97.133:2999/Json?Date=2022_06_04")
         let fetchParams = '';
 
         if(date != null)
@@ -178,7 +178,7 @@
             fetchParams = "?Days="+days;
         
 
-        fetch("http://"+ip+":3000/XXJson"+fetchParams)
+        fetch("http://"+ip+":2999/XXJson"+fetchParams)
         .then(response => {
         return response.json();
         })
