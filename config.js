@@ -26,38 +26,45 @@ function createDataTable(values)
         let fifth = 0;
         let third = 0;
         let forth = 0;
+        let six = 0;
 
         for(let b=0; b < 4; b++)
         {
-            let modValue = returnModulation(entry.Data[b].type);
-            let frequ = entry.Data[b].frequency;
+            let entrymodtype  = entry.Data[b].modulation;
+            let modValue = returnModulation(entrymodtype);
+            let channelid = parseInt(entry.Data[b].channelID);
 
-            switch(frequ) {
-                case "31":
+            switch(channelid) {
+                case 12:
                     second = modValue;
-                    writeToAnalyse(1, entry.Data[b].type);
+                    writeToAnalyse(1, entry.Data[b].modulation);
                     break;
-                case "37":
+                case 11:
                     third = modValue;
-                    writeToAnalyse(2, entry.Data[b].type);
+                    writeToAnalyse(2, entry.Data[b].modulation);
                     break;
-                case "45":
+                case 10:
                     forth = modValue;
-                    writeToAnalyse(3, entry.Data[b].type);
+                    writeToAnalyse(3, entry.Data[b].modulation);
                     break;
-                case "51":                                       
+                case 9:                                       
                     fifth = modValue;
-                    writeToAnalyse(4, entry.Data[b].type);
+                    writeToAnalyse(4, entry.Data[b].modulation);
                     break;
             }
-
         }
+
+        let entrymodtype  = entry.Data31[0].modulation;
+        six = returnModulation(entrymodtype);
+        writeToAnalyse(5, entrymodtype);
+
         qfactorTable[a] = ((second+third+forth+fifth)/2.56);
         
         resultTables[0][a] = second;
         resultTables[1][a] = third;
         resultTables[2][a] = forth;
         resultTables[3][a] = fifth;
+        resultTables[4][a] = six;
 
         resultLabel[a] = first.substr(11,8);
     }

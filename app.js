@@ -203,7 +203,10 @@ function Worker()
     logger.log(currentJson);
 
     channelDs.Data = currentJson.data.channelDs.docsis30;
+    channelDs.Data31 = currentJson.data.channelDs.docsis31;
+    
     channelUs.Data = currentJson.data.channelUs.docsis30;
+    channelUs.Data31 = currentJson.data.channelUs.docsis31;
 
     channelDs.Time = currentTime;
     channelUs.Time = currentTime;

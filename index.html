@@ -15,7 +15,7 @@
         var resultLabel = [];
         var qfactorTable = [];
 
-        var resultTables = Array.from(Array(4), () => new Array(4));
+        var resultTables = Array.from(Array(5), () => new Array(5));
         var isTablesInit = false;
 
         var analyseObj1 = {};
@@ -46,15 +46,22 @@
         analyseObj4.IS8 = 0;
         analyseObj4.IS4 = 0;
 
-        var ip = getUrlParam("ip", "192.168.97.133");
+                var analyseObj5 = {};
+        analyseObj5.IS64 = 0;
+        analyseObj5.IS32 = 0;
+        analyseObj5.IS16 = 0;
+        analyseObj5.IS8 = 0;
+        analyseObj5.IS4 = 0;
+
+        var ip = getUrlParam("ip", "192.168.97.2");
         var days = getUrlParam("days", null);
 
         var today = new Date();
         var da = today.getFullYear()+'_'+get2Digits(today.getMonth()+1)+'_'+get2Digits(today.getDate());
         var date = getUrlParam("date", null);
 
-        var numLab = [ "31", "37", "45", "51"];
-        var numCol = [ "red", "orange", "green", "cornflowerblue"];
+        var numLab = [ "12", "11", "10", "9", "43"];
+        var numCol = [ "red", "orange", "green", "cornflowerblue", "lime"];
 
         function drawCharts(re_data)
         {
@@ -110,7 +117,7 @@
 
             const myChart1 = new Chart(document.getElementById('qqq'), config1);
 
-            for(let a=0; a < 4; a++)
+            for(let a=0; a < 5; a++)
             {
                 const data = {
                     labels: resultLabel,
@@ -137,7 +144,7 @@
                                         + objW.IS8 + " x 8QAM ("+Math.round(objW.IS8/6)+" min)  |  "
                                         + objW.IS16 + " x 16QAM ("+Math.round(objW.IS16/6)+" min)  |  "
                                         + objW.IS32 + " x 32QAM ("+Math.round(objW.IS32/6)+" min)  |  "
-                                        + objW.IS64 + " x 64QAM ("+Math.round(objW.IS64/6)+" min)" + ' @@@ Channel '+ numLab[a] + 'mc',
+                                        + objW.IS64 + " x 64QAM ("+Math.round(objW.IS64/6)+" min)" + ' @@@ Channel '+ numLab[a],
                                 color: '#ffffff'
                             },
                             legend: {
@@ -197,10 +204,11 @@
 
     <div class="chart-container" style="position: relative; width:98vw">
         <canvas id="qqq" style="width:100%;max-width:100%; height:18vh;"></canvas>
-        <canvas id="myChart31" style="width:100%;max-width:100%; height:20vh;"></canvas>
-        <canvas id="myChart37" style="width:100%;max-width:100%; height:20vh;"></canvas>
-        <canvas id="myChart45" style="width:100%;max-width:100%; height:20vh;"></canvas>
-        <canvas id="myChart51" style="width:100%;max-width:100%; height:20vh;"></canvas>
+        <canvas id="myChart12" style="width:100%;max-width:100%; height:15vh;"></canvas>
+        <canvas id="myChart11" style="width:100%;max-width:100%; height:15vh;"></canvas>
+        <canvas id="myChart10" style="width:100%;max-width:100%; height:15vh;"></canvas>
+        <canvas id="myChart9" style="width:100%;max-width:100%; height:15vh;"></canvas>
+        <canvas id="myChart43" style="width:100%;max-width:100%; height:15vh;"></canvas>
     </div>
     </body>
   </html>
