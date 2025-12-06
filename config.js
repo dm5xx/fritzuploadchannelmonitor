@@ -54,7 +54,7 @@ function createDataTable(values)
             }
         }
 
-        let entrymodtype  = entry.Data31[0].modulation;
+        let entrymodtype  = entry.Data31[0] == undefined || entry.Data31[0].modulation == undefined? "4QAM" : entry.Data31[0].modulation;
         six = returnModulation(entrymodtype);
         writeToAnalyse(5, entrymodtype);
 
