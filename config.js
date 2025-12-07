@@ -26,7 +26,7 @@ function createDataTable(values)
         let fifth = 0;
         let third = 0;
         let forth = 0;
-        let six = 0;
+        let six = 0; 
 
         for(let b=0; b < 4; b++)
         {
